@@ -83,7 +83,13 @@ fun ProductGrid(modifier: Modifier = Modifier) {
         Product("Laptop HP 240 G9", "https://upload.wikimedia.org/wikipedia/commons/c/cc/Apple-laptop-notebook-notes_%2823699694403%29.jpg", "Plateada 14'', Intel Celeron N4500 8GB de RAM 256GB SSD"),
         Product("Mouse", "https://upload.wikimedia.org/wikipedia/commons/0/08/A_computer_mouse.jpg", "Mouse gamer"),
         Product("Teclado", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGH3gLV2MF3WEJN-uqJWIousQYWDANIb1VM5UV7lpLfw&s", "Teclado mecánico"),
-        Product("Monitor", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmZMAJ7QzplOac6PyFDxmUSBpStFOppnFg0Qf-8NJPbw&s", "Monitor 4k")
+        Product("Monitor", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmZMAJ7QzplOac6PyFDxmUSBpStFOppnFg0Qf-8NJPbw&s", "Monitor 4k"),
+        Product("Tablet Android", "https://www.trustedreviews.com/wp-content/uploads/sites/54/2023/06/X1006947-920x610.jpeg", "Tablet de 10 pulgadas con Android 11"),
+        Product("Smartphone Pro", "https://c.pxhere.com/photos/37/4d/apps_blurred_background_cellphone_cellular_telephone_device_display_electronics_hand-1515639.jpg!d", "Smartphone con 5G y cámara de 108MP"),
+        Product("Smartwatch Fit", "https://www.trustedreviews.com/wp-content/uploads/sites/54/2022/06/Huawei-Watch-Fit-2-24-920x518.jpg", "Reloj inteligente con seguimiento de actividad y salud"),
+        Product("Cámara DSLR", "https://c.pxhere.com/photos/97/dd/camera_canon_photography_dslr_equipment_shooting_picture_production-484063.jpg!d", "Cámara profesional con sensor de 24MP y lentes intercambiables"),
+        Product("Auriculares Inalámbricos", "https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", "Auriculares con cancelación de ruido y 12 horas de batería"),
+        Product("Consola de Juegos", "https://c.pxhere.com/photos/30/1d/3ds_control_display_game_hand_nintendo_person_portable-1530945.jpg!d", "Consola de última generación con 8K y SSD ultra rápida")
     )
 
     LazyVerticalGrid(
