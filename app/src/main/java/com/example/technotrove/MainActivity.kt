@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -38,6 +39,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -72,7 +75,7 @@ val categories = allProducts.map { it.category }.distinct()
 class AppColors{
     companion object {
         fun textColor() : Color = Color(0xFF732025)
-        fun backgroundColor(): Color = Color(0xFF547c98)
+        fun backgroundColor(): Color = Color(0xFF4a8596)
     }
 }
 
@@ -81,6 +84,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             TechnotroveTheme {
                 // A surface container using the 'background' color from the theme
@@ -96,12 +100,37 @@ class MainActivity : ComponentActivity() {
 fun AppNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(navController = navController, startDestination = "splash") {
+
+        composable("splash") {
+            SplashScreen(onLoadingFinished = { navController.navigate("home") })
+        }
         composable("home") { HomeScreen(onNavigateToSearchScreen = { navController.navigate("search") }, onNavigateToCategoriesScreen = { navController.navigate("categories") }) }
         composable("search") { SearchScreen() }
         composable("categories") { CategoriesScreen() }
     }
 }
+
+@Composable
+fun SplashScreen(onLoadingFinished: () -> Unit) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize().background(AppColors.backgroundColor())
+    ) {
+        // Reemplazar "R.drawable.logo" con tu recurso de logo real
+        Image(
+            painter = painterResource(id = R.drawable.img),
+            contentDescription = "Logo",
+            modifier = Modifier.size(120.dp)
+        )
+    }
+
+    LaunchedEffect(true) {
+        kotlinx.coroutines.delay(3000)
+        onLoadingFinished()
+    }
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
