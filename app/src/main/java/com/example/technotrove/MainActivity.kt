@@ -45,10 +45,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -64,11 +67,32 @@ data class Product(
     val category: String
 )
 
+
 val allProducts = listOf(
-    Product("Laptop HP 240 G9", "https://upload.wikimedia.org/wikipedia/commons/c/cc/Apple-laptop-notebook-notes_%2823699694403%29.jpg", "Plateada 14'', Intel Celeron N4500 8GB de RAM 256GB SSD", "Electrónica"),
-    Product("Mouse Gamer", "https://upload.wikimedia.org/wikipedia/commons/0/08/A_computer_mouse.jpg", "Mouse gamer ergonómico y con iluminación RGB", "Accesorios"),
-    Product("Teclado Mecánico", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGH3gLV2MF3WEJN-uqJWIousQYWDANIb1VM5UV7lpLfw&s", "Teclado mecánico con switches azules", "Accesorios"),
-    Product("Monitor 4K", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmZMAJ7QzplOac6PyFDxmUSBpStFOppnFg0Qf-8NJPbw&s", "Monitor 4k UHD con HDR", "Electrónica")
+    Product("Apple Macbook Air", "https://http2.mlstatic.com/D_NQ_NP_801112-MLA46516512347_062021-O.webp", "13 pulgadas, 2020, Chip M1, 256 GB de SSD, 8 GB de RAM", "Laptops"),
+    Product("Laptop Lenovo Ideapad 3", "https://http2.mlstatic.com/D_NQ_NP_604103-MLA53561300460_022023-O.webp", "15.6'' Ryzen 7 16gb Ram 512gb Ssd Color Sand", "Laptops"),
+    Product("Laptop HP Victus", "https://http2.mlstatic.com/D_NQ_NP_935455-MLA73565691895_122023-O.webp", "15.6'' Ryzen 7 16gb Ram 512gb Ssd Color Sand", "Laptops"),
+    Product("Apple Macbook Air", "https://http2.mlstatic.com/D_NQ_NP_801112-MLA46516512347_062021-O.webp", "15.6'' AMD Ryzen 5 7535hs 8 Ram 512 Ssd Rtx 2050 - Color Mica Silver", "Laptops"),
+    Product("Rechargeable Ultra-thin", "https://http2.mlstatic.com/D_NQ_NP_781661-MLM52779396059_122022-O.webp", "Usb + 2.4 Wireless", "Mouses"),
+    Product("Mouse Silencioso", "https://http2.mlstatic.com/D_NQ_NP_899880-MLU72566183392_112023-O.webp", "Receptor Usb Para Laptop, Pc", "Mouses"),
+    Product("Mouse con Cable HP", "https://http2.mlstatic.com/D_NQ_NP_767390-MLA51439543986_092022-O.webp", "Con cable", "Mouses"),
+    Product("Ratón Ergonómico", "https://http2.mlstatic.com/D_NQ_NP_846884-CBT73292746766_122023-O.webp", "2.4 Ghz Con 3 Dpis", "Mouses"),
+    Product("Free Wolf K3 Teclado Gamer Mecánico", "https://http2.mlstatic.com/D_NQ_NP_698228-MLA73562095985_122023-O.webp", "Teclado mecánico", "Teclados"),
+    Product("Set Inalámbrico De Teclado Español Y Mouse Portátil", "https://http2.mlstatic.com/D_NQ_NP_900890-CBT73964077461_012024-O.webp", "Teclado mecánico", "Teclados"),
+    Product("Teclado Inalambrico Español,recargable Bluetooth Wireless", "https://http2.mlstatic.com/D_NQ_NP_981472-MLM69590756318_052023-O.webp", "Teclado mecánico", "Teclados"),
+    Product("Vorago KM-500 Kit Gamer De Teclado y Mouse", "http://http2.mlstatic.com/D_NQ_NP_656080-MLU72832009547_112023-O.webp", "Teclado mecánico", "Teclados"),
+    Product("Monitor gamer curvo Samsung F390 27\" ", "https://http2.mlstatic.com/D_NQ_NP_908044-MLU72575476474_112023-O.webp", "Voltaje: 100V/240V", "Monitores"),
+    Product("Monitor gamer Crua G220A led 22\" negro", "https://http2.mlstatic.com/D_NQ_NP_684434-MLA69389814031_052023-O.webp", "Voltaje: 100V/240V", "Monitores"),
+    Product("Monitor Gamer Curvo Crua Cr240cm 24", "https://http2.mlstatic.com/D_NQ_NP_720301-CBT72561704612_112023-O.webp", "Voltaje: 100V/240V", "Monitores"),
+    Product("Monitor De Computadora 19 Pulgadas", "https://http2.mlstatic.com/D_NQ_NP_839865-MLM72212067392_102023-O.webp", "Voltaje: 100V/240V", "Monitores"),
+    Product("Tablet Samsung Galaxy Tab S9", "https://http2.mlstatic.com/D_NQ_NP_834583-MLM75911493222_042024-O.webp", "Gris 256gb", "Tabletas"),
+    Product("Tablet Lenovo Xiaoxin Pad 2022", "https://http2.mlstatic.com/D_NQ_NP_745695-MLC51803089024_102022-O.webp", "6gb 128gb Pantalla Lcd 2k", "Tabletas"),
+    Product("Tablet Apple iPad 9na", "https://http2.mlstatic.com/D_NQ_NP_912069-MLA74807972777_022024-O.webp", "Wifi 64gb Gris Espacial", "Tabletas"),
+    Product("Tablet Huawei Matepad 11.5", "https://http2.mlstatic.com/D_NQ_NP_744618-MLA75618099625_042024-O.webp", "8+256 Gb Papermatte Edition Gris", "Tabletas"),
+    Product("Smartwatch 1.8''", "https://http2.mlstatic.com/D_NQ_NP_873857-CBT76063440439_042024-O.webp", "eloj Inteligente Bluetooth Llamada Alexa", "Smartwatchs"),
+    Product("Smart Watch Reloj Samsung Galaxy", "https://http2.mlstatic.com/D_NQ_NP_860438-MLA74805960019_022024-O.webp", "Color Del Bisel Negro Diseño De La Malla Silicona", "Smartwatchs"),
+    Product("Smartwatch Redmi Watch 3", "https://http2.mlstatic.com/D_NQ_NP_678515-MLU73735804333_122023-O.webp", "Negro", "Smartwatchs"),
+    Product("Apple Watch Series 7", "https://http2.mlstatic.com/D_NQ_NP_621695-MLA48090381016_112021-O.webp", "Caja de aluminio color verde", "Smartwatchs"),
 )
 
 val categories = allProducts.map { it.category }.distinct()
@@ -234,43 +258,64 @@ fun ProductItem(product: Product) {
 
 @Composable
 fun SearchScreen() {
+    var searchText by remember { mutableStateOf("") }
+    val filteredProducts = allProducts.filter {
+        it.title.contains(searchText, ignoreCase = true)
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(AppColors.backgroundColor()) // Usar el color de fondo apropiado
+            .background(AppColors.backgroundColor())
     ) {
         SearchBar(modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
+            onSearch =  { text ->
+                searchText = text
+            }
         )
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-            Text("Buscar", color = AppColors.textColor())
-            Spacer(modifier = Modifier.width(20.dp))
-            IconButton(onClick = { /* Realizar búsqueda */ }) {
-                Icon(Icons.Filled.Search, contentDescription = "Buscar...", tint = Color.Black)
+
+        LazyVerticalGrid( columns = GridCells.Fixed(2)) {
+            items(filteredProducts) { product ->
+                ProductItem(product)
             }
         }
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBar(modifier: Modifier = Modifier) {
+fun SearchBar(modifier: Modifier = Modifier, onSearch: (text: String) -> Unit) {
     val searchText = remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-    Box(
-        modifier = modifier.height(56.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        OutlinedTextField(
-            value = searchText.value,
-            onValueChange = { searchText.value = it },
-            placeholder = { Text("Buscar...") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = androidx.compose.ui.text.input.ImeAction.Search),
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White, shape = MaterialTheme.shapes.small)
-        )
+    Column{
+        Box(
+            modifier = modifier.height(56.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            OutlinedTextField(
+                value = searchText.value,
+                onValueChange = { searchText.value = it },
+                placeholder = { Text("Buscar...") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = androidx.compose.ui.text.input.ImeAction.Search),
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White, shape = MaterialTheme.shapes.small)
+            )
+        }
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+            Text("Buscar", color = AppColors.textColor())
+            Spacer(modifier = Modifier.width(20.dp))
+            IconButton(onClick = {
+                onSearch(searchText.value)
+                keyboardController?.hide()
+            }) {
+                Icon(Icons.Filled.Search, contentDescription = "Buscar...", tint = Color.Black)
+            }
+        }
     }
 }
 
@@ -280,24 +325,13 @@ fun SearchBar(modifier: Modifier = Modifier) {
 
 @Composable
 fun ProductGrid(modifier: Modifier = Modifier) {
-    val products = listOf(
-        Product("Laptop HP 240 G9", "https://upload.wikimedia.org/wikipedia/commons/c/cc/Apple-laptop-notebook-notes_%2823699694403%29.jpg", "Plateada 14'', Intel Celeron N4500 8GB de RAM 256GB SSD", ""),
-        Product("Mouse", "https://upload.wikimedia.org/wikipedia/commons/0/08/A_computer_mouse.jpg", "Mouse gamer", ""),
-        Product("Teclado", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGH3gLV2MF3WEJN-uqJWIousQYWDANIb1VM5UV7lpLfw&s", "Teclado mecánico", ""),
-        Product("Monitor", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmZMAJ7QzplOac6PyFDxmUSBpStFOppnFg0Qf-8NJPbw&s", "Monitor 4k", ""),
-        Product("Tablet Android", "https://www.trustedreviews.com/wp-content/uploads/sites/54/2023/06/X1006947-920x610.jpeg", "Tablet de 10 pulgadas con Android 11", ""),
-        Product("Smartphone Pro", "https://c.pxhere.com/photos/37/4d/apps_blurred_background_cellphone_cellular_telephone_device_display_electronics_hand-1515639.jpg!d", "Smartphone con 5G y cámara de 108MP", ""),
-        Product("Smartwatch Fit", "https://www.trustedreviews.com/wp-content/uploads/sites/54/2022/06/Huawei-Watch-Fit-2-24-920x518.jpg", "Reloj inteligente con seguimiento de actividad y salud", ""),
-        Product("Cámara DSLR", "https://c.pxhere.com/photos/97/dd/camera_canon_photography_dslr_equipment_shooting_picture_production-484063.jpg!d", "Cámara profesional con sensor de 24MP y lentes intercambiables", ""),
-        Product("Auriculares Inalámbricos", "https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", "Auriculares con cancelación de ruido y 12 horas de batería", ""),
-        Product("Consola de Juegos", "https://c.pxhere.com/photos/30/1d/3ds_control_display_game_hand_nintendo_person_portable-1530945.jpg!d", "Consola de última generación con 8K y SSD ultra rápida", "")
-    )
+
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = modifier
     ) {
-        items(products) { product ->
+        items(allProducts) { product ->
             Card(
                 modifier = Modifier
                     .padding(8.dp)
